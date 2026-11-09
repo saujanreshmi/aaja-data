@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "names": {
+    "placeholder-regional-1": { "nameEnglish": "Placeholder Regional Holiday 1", "nameNepali": "नमूना क्षेत्रीय बिदा १" },
+    "placeholder-regional-2": { "nameEnglish": "Placeholder Regional Holiday 2", "nameNepali": "नमूना क्षेत्रीय बिदा २" },
+    "placeholder-regional-3": { "nameEnglish": "Placeholder Regional Holiday 3", "nameNepali": "नमूना क्षेत्रीय बिदा ३" }
+  },
+  "years": [
+    {
+      "year": 2082,
+      "verified": false,
+      "holidays": [
+        { "month": 2, "day": 5, "id": "placeholder-regional-1" },
+        { "month": 6, "day": 20, "id": "placeholder-regional-2" },
+        { "month": 11, "day": 12, "id": "placeholder-regional-3" }
+      ]
+    },
+    {
+      "year": 2083,
+      "verified": false,
+      "holidays": [
+        { "month": 2, "day": 5, "id": "placeholder-regional-1" },
+        { "month": 6, "day": 20, "id": "placeholder-regional-2" },
+        { "month": 11, "day": 12, "id": "placeholder-regional-3" }
+      ]
+    }
+  ]
+}
