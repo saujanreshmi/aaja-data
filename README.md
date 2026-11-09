@@ -17,9 +17,9 @@ arithmetic consistency (month lengths sum to 365, AD date ranges contiguous,
 weekday progression consistent) but has **not** yet been verified against the
 official Samiti PDF.
 
-**`v1/calendars/other_holidays.json` and the `tithis` field in
+**`v1/calendars/holidays.json` and the `tithis` field in
 `v1/years.json` are currently placeholder content, not real data.**
-`other_holidays.json` is filled with obviously-fabricated entries (e.g.
+`holidays.json` is filled with obviously-fabricated entries (e.g.
 "Placeholder Regional Holiday 1"). `years.json`'s `tithis` field just cycles
 the 16 valid tithi numbers (1, 2, 3, ..., 15, 30, 1, 2, ...) across days with
 no regard for which tithi actually falls on which real calendar day — so the
@@ -48,7 +48,7 @@ that mirror how the app treats the data:
 - **`v1/calendars/`** — the app's optional, user-toggleable "Calendars"
   layer, the same concept as iOS's own Settings → Calendar → Calendars list
   (Birthdays, Holidays, subscribed calendars you can show or hide). Starts
-  with `other_holidays.json`; more named calendars can be added here later
+  with `holidays.json`; more named calendars can be added here later
   without disturbing the core tier above.
 
 Each file has its own independent `schemaVersion` — if one file's schema
@@ -63,7 +63,7 @@ ever needs a breaking change, only that file moves to a new `v2/` path (e.g.
   yet; the day-number list is often known well before every day has a
   researched English/Nepali name, so there's nothing to block the redness
   on. Likewise tithis can be filled in month by month as they're worked out.
-- `v1/calendars/other_holidays.json` — other holidays (regional, community,
+- `v1/calendars/holidays.json` — holidays (regional, community,
   cultural, etc. -- anything not in the core dataset, and never shown in
   red). Each occurrence references a holiday by `id` rather than carrying
   its name directly, since the same holiday (e.g. Dashain) recurs across
@@ -102,7 +102,7 @@ a data error.
 
 - **`holidays`**: a day appearing in its month's array is a holiday -- shown
   in red, the same weight as Saturday -- regardless of whether any name for
-  it exists anywhere (see `other_holidays.json` for names). Every
+  it exists anywhere (see `holidays.json` for names). Every
   day-number must fall within that month's real length (from `monthLengths`
   in the same record). A missing month's array simply has no holidays yet.
 - **`tithis`**: a tithi *number*, not a name — one of 1 through 15, or 30.
@@ -119,7 +119,7 @@ a data error.
   "zero or more" like holidays. A wrong count would silently shift every
   later tithi in the month by a day.
 
-**`v1/calendars/other_holidays.json`**
+**`v1/calendars/holidays.json`**
 ```json
 {
   "schemaVersion": 1,
@@ -154,7 +154,7 @@ syntax or parameters, just a plain `GET` per file, e.g.:
 
 ```
 GET https://saujanreshmi.github.io/aaja-data/v1/years.json
-GET https://saujanreshmi.github.io/aaja-data/v1/calendars/other_holidays.json
+GET https://saujanreshmi.github.io/aaja-data/v1/calendars/holidays.json
 ```
 
 - **Conditional requests are supported and expected**, per file. GitHub Pages
