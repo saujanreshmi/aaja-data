@@ -17,16 +17,21 @@ arithmetic consistency (month lengths sum to 365, AD date ranges contiguous,
 weekday progression consistent) but has **not** yet been verified against the
 official Samiti PDF.
 
-**`v1/calendars/holidays.json` and the `tithis` field in
-`v1/years.json` are currently placeholder content, not real data.**
-`holidays.json` is filled with obviously-fabricated entries (e.g.
-"Placeholder Regional Holiday 1"). `years.json`'s `tithis` field just cycles
-the 16 valid tithi numbers (1, 2, 3, ..., 15, 30, 1, 2, ...) across days with
-no regard for which tithi actually falls on which real calendar day — so the
-app's fetch/cache/render pipeline could be built and tested end-to-end
-before real, approved per-day data exists. **Every placeholder entry must be
-replaced with real Samiti-approved day assignments before shipping** —
-nothing in them should be mistaken for a real holiday or tithi occurrence.
+**`v1/calendars/holidays.json` and BS 2082's `tithis` in `v1/years.json`
+are currently placeholder content, not real data.** `holidays.json` is
+filled with obviously-fabricated entries (e.g. "Placeholder Regional
+Holiday 1"). 2082's `tithis` just cycle 1, 2, 3, ..., 15, 30, 1, 2, ... across
+days with no regard for which tithi actually falls on which real calendar
+day — so the app's fetch/cache/render pipeline could be built and tested
+end-to-end before real, approved per-day data exists. **Every placeholder
+entry must be replaced with real Samiti-approved day assignments before
+shipping** — nothing in them should be mistaken for a real holiday or tithi
+occurrence.
+
+BS 2083's `tithis` are real day assignments transcribed from a printed
+calendar, but not yet cross-checked against the official Samiti PDF (hence
+`verified: false`). 32 of its 365 days were inferred from neighbouring dates
+rather than read directly, and still need checking.
 
 `v1/years.json`'s `holidays` field (2083 only so far) is a real day-number
 list transcribed directly off a printed calendar -- it's complete for the
@@ -86,7 +91,7 @@ ever needs a breaking change, only that file moves to a new `v2/` path (e.g.
         "... 10 more month arrays, one per month, each listing that month's holiday day-numbers ..."
       ],
       "tithis": [
-        [1, 2, 3, "... one number per day of month 1 ..."],
+        [27, 28, 29, 30, 1, 2, "... one number per day of month 1 ..."],
         "... 11 more month arrays ..."
       ],
       "verified": false
@@ -105,11 +110,22 @@ a data error.
   it exists anywhere (see `holidays.json` for names). Every
   day-number must fall within that month's real length (from `monthLengths`
   in the same record). A missing month's array simply has no holidays yet.
-- **`tithis`**: a tithi *number*, not a name — one of 1 through 15, or 30.
-  1 through 14 are shared between the waxing (shukla) and waning (krishna)
-  half of the lunar month; 15 marks Purnima at the end of the waxing half,
-  and 30 marks Amavasya (Aunsi) at the end of the waning half, so it never
-  reuses 15 for both. The English/Nepali name for each number is fixed and
+- **`tithis`**: a tithi *number*, not a name — its position in the lunar
+  month, 1 through 30, so the number also carries the paksha:
+
+  | Number | Paksha | Tithi (printed number) |
+    |---|---|---|
+  | 1–14 | Shukla (waxing) | Pratipada (1) … Chaturdashi (14) |
+  | 15 | Shukla | Purnima (15) |
+  | 16–29 | Krishna (waning) | Pratipada (1) … Chaturdashi (14) |
+  | 30 | Krishna | Amavasya / Aunsi (30) |
+
+  A printed Krishna tithi is stored as its printed number + 15 (e.g. Krishna
+  Dwadashi, printed 12, is 27). The printed 1–14 alone can't tell the two
+  halves apart, which is why the paksha is encoded here rather than inferred.
+  Day to day, the number advances by 1, or stays the same when a tithi spans
+  two sunrises, or advances by 2 when one is skipped -- never by more.
+  The English/Nepali name for each number is fixed and
   lives in the app (`BSTithiNames` in `BSCalendarKit`), not here -- unlike
   holiday names, tithi names are a closed, permanent set that never grows
   or needs correcting independently of an app release. Unlike `holidays`,
@@ -167,7 +183,10 @@ GET https://saujanreshmi.github.io/aaja-data/v1/calendars/holidays.json
   change, that file ships as `v2/` alongside the others' `v1/` rather than
   changing `v1/`'s shape — so don't assume new fields won't appear in a
   `v1/` file additively, but do assume existing fields won't be removed or
-  repurposed within that file's `v1/`.
+  repurposed within that file's `v1/`. (One exception, made before any app
+  release: `years.json`'s `tithis` changed on 2026-11-14 from printed numbers
+  1–15/30 to 1–30 with paksha encoded. Clients built before then reject the
+  new numbers and keep their cached data.)
 - **Every file is a complete snapshot, never a diff.** A client refreshing a
   file should replace everything it has cached for that file with whatever
   the latest fetch returns — there's no merge-by-year or upsert-by-date
