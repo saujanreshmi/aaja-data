@@ -5,7 +5,8 @@
       "id": "holidays",
       "name": "Holidays",
       "description": "धर्म, संस्कृति, जात्रा, भौगोलिक क्षेत्र र स्थान इत्यादि बिदाहरू ।",
-      "url": "calendars/holidays.json"
+      "url": "calendars/holidays.json",
+      "color": "red"
     }
   ]
 }
