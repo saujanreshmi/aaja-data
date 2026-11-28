@@ -12,31 +12,18 @@ approved by the app's maintainer. A new year is only added once its calendar
 has been published and approved by the Nepal Panchanga Nirnayak Bikash
 Samiti.
 
-**BS 2083 is currently provisional.** It was cross-checked internally for
-arithmetic consistency (month lengths sum to 365, AD date ranges contiguous,
-weekday progression consistent) but has **not** yet been verified against the
-official Samiti PDF.
+**All published data is currently provisional (`verified: false`).** It
+has been cross-checked internally for consistency (month lengths sum to the
+year's length, AD date ranges contiguous, weekday progression consistent,
+tithis advancing by 0, 1 or 2 from day to day) but has **not** yet been
+verified against the official Samiti PDF.
 
-**`v1/calendars/holidays.json` and BS 2082's `tithis` in `v1/years.json`
-are currently placeholder content, not real data.** `holidays.json` is
-filled with obviously-fabricated entries (e.g. "Placeholder Regional
-Holiday 1"). 2082's `tithis` just cycle 1, 2, 3, ..., 15, 30, 1, 2, ... across
-days with no regard for which tithi actually falls on which real calendar
-day — so the app's fetch/cache/render pipeline could be built and tested
-end-to-end before real, approved per-day data exists. **Every placeholder
-entry must be replaced with real Samiti-approved day assignments before
-shipping** — nothing in them should be mistaken for a real holiday or tithi
-occurrence.
-
-BS 2083's `tithis` are real day assignments transcribed from a printed
-calendar, but not yet cross-checked against the official Samiti PDF (hence
-`verified: false`). 32 of its 365 days were inferred from neighbouring dates
-rather than read directly, and still need checking.
-
-`v1/years.json`'s `holidays` field (2083 only so far) is a real day-number
-list transcribed directly off a printed calendar -- it's complete for the
-days it lists, just not yet cross-checked against the official Samiti PDF
-(hence `verified: false`).
+- **BS 2082 and 2083 in `v1/years.json`**: month lengths, public holidays
+  (red days) and tithis for every day of both years.
+- **BS 2083's `tithis`** were transcribed from a printed calendar; 32 of its
+  365 days were inferred from neighbouring dates rather than read directly,
+  and still need checking.
+- **`v1/calendars/holidays.json`**: named holidays for BS 2082 and 2083.
 
 ## Layout
 
@@ -68,6 +55,10 @@ ever needs a breaking change, only that file moves to a new `v2/` path (e.g.
   yet; the day-number list is often known well before every day has a
   researched English/Nepali name, so there's nothing to block the redness
   on. Likewise tithis can be filled in month by month as they're worked out.
+- `v1/calendars.json` — the list of optional calendars the app shows (id,
+  name, description, relative `url` and a required `color`), in display
+  order.
+- `privacy/` — the app's privacy policy page.
 - `v1/calendars/holidays.json` — holidays (regional, community,
   cultural, etc. -- anything not in the core dataset, and never shown in
   red). Each occurrence references a holiday by `id` rather than carrying
