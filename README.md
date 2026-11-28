@@ -160,8 +160,8 @@ These are static files on GitHub Pages, not a dynamic API — there's no query
 syntax or parameters, just a plain `GET` per file, e.g.:
 
 ```
-GET https://saujanreshmi.github.io/aaja-data/v1/years.json
-GET https://saujanreshmi.github.io/aaja-data/v1/calendars/holidays.json
+GET https://aaja.saujanthapa.com/v1/years.json
+GET https://aaja.saujanthapa.com/v1/calendars/holidays.json
 ```
 
 - **Conditional requests are supported and expected**, per file. GitHub Pages
